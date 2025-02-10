@@ -34,17 +34,19 @@
             padding: 5px;
             border: 1px solid #ddd;
             word-wrap: break-word;
-            white-space: pre-wrap;
+            white-space: pre-wrap; 
         }
 
         .copy-btn {
-            margin-left: 10px;
+            margin-top: 10px;
             cursor: pointer;
-            color: #3155a4;
+            background-color: #3155a4;
+color:White;
             text-decoration: underline;
         }
     </style>
 </head>
+
 <body>
     <h1>Aprimo Naming Convention</h1>
 
@@ -55,6 +57,7 @@
 
     <h2>Formatted Output:</h2>
     <div id="output"></div>
+    <button class="copy-btn" id="copyButton" onclick="copyToClipboard()">Copy All</button>
 
     <script>
         function formatText() {
@@ -62,8 +65,9 @@
             const lines = input.split('\n');
 
             const outputDiv = document.getElementById('output');
-            outputDiv.innerHTML = '';
+            outputDiv.innerHTML = '';  
 
+            let formattedText = '';
 
             lines.forEach((line) => {
                 const formattedLine = line
@@ -71,33 +75,29 @@
                     .replace(/[^a-z0-9\s-]/g, '')
                     .replace(/\s+/g, '-');
 
-                const lineDiv = document.createElement('div');
-                lineDiv.classList.add('output-line');
-
-
-                const textNode = document.createTextNode(formattedLine);
-
-
-                const copyBtn = document.createElement('span');
-                copyBtn.classList.add('copy-btn');
-                copyBtn.textContent = 'Copy';
-                copyBtn.onclick = () => copyToClipboard(formattedLine);
-
-                lineDiv.appendChild(textNode);
-                lineDiv.appendChild(copyBtn);
-                outputDiv.appendChild(lineDiv);
+                formattedText += formattedLine + '\n'; 
             });
+
+            const formattedTextDiv = document.createElement('div');
+            formattedTextDiv.classList.add('output-line');
+            formattedTextDiv.textContent = formattedText;
+            outputDiv.appendChild(formattedTextDiv);
         }
 
-        function copyToClipboard(text) {
-            const tempInput = document.createElement('input');
+        function copyToClipboard() {
+            const outputDiv = document.getElementById('output');
+            const formattedText = outputDiv.textContent; 
+
+            const tempInput = document.createElement('textarea');  
             document.body.appendChild(tempInput);
-            tempInput.value = text;
+            tempInput.value = formattedText;  
             tempInput.select();
             document.execCommand('copy');
             document.body.removeChild(tempInput);
+
             alert('Copied to clipboard!');
         }
     </script>
 </body>
+
 </html>
