@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aprimo Naming Convention</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 20px;
+        }
+
+        textarea {
+            width: 100%;
+            height: 150px;
+            padding: 10px;
+            font-size: 16px;
+        }
+
+        button {
+            margin-top: 10px;
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            background-color: #3155a4;
+            border-style: none;
+            color: #ffffff;
+        }
+
+        .output-line {
+            margin-top: 5px;
+            background-color: #f4f4f4;
+            padding: 5px;
+            border: 1px solid #ddd;
+            word-wrap: break-word;
+            white-space: pre-wrap;
+        }
+
+        .copy-btn {
+            margin-left: 10px;
+            cursor: pointer;
+            color: #3155a4;
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <h1>Aprimo Naming Convention</h1>
+
+    <p>Paste your text below:</p>
+    <textarea id="inputText" placeholder="Paste your text here"></textarea>
+
+    <button onclick="formatText()">Format Text</button>
+
+    <h2>Formatted Output:</h2>
+    <div id="output"></div>
+
+    <script>
+        function formatText() {
+            const input = document.getElementById('inputText').value;
+            const lines = input.split('\n');
+
+            const outputDiv = document.getElementById('output');
+            outputDiv.innerHTML = '';
+
+
+            lines.forEach((line) => {
+                const formattedLine = line
+                    .toLowerCase()
+                    .replace(/[^a-z0-9\s-]/g, '')
+                    .replace(/\s+/g, '-');
+
+                const lineDiv = document.createElement('div');
+                lineDiv.classList.add('output-line');
+
+
+                const textNode = document.createTextNode(formattedLine);
+
+
+                const copyBtn = document.createElement('span');
+                copyBtn.classList.add('copy-btn');
+                copyBtn.textContent = 'Copy';
+                copyBtn.onclick = () => copyToClipboard(formattedLine);
+
+                lineDiv.appendChild(textNode);
+                lineDiv.appendChild(copyBtn);
+                outputDiv.appendChild(lineDiv);
+            });
+        }
+
+        function copyToClipboard(text) {
+            const tempInput = document.createElement('input');
+            document.body.appendChild(tempInput);
+            tempInput.value = text;
+            tempInput.select();
+            document.execCommand('copy');
+            document.body.removeChild(tempInput);
+            alert('Copied to clipboard!');
+        }
+    </script>
+</body>
+</html>
