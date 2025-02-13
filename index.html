@@ -84,7 +84,7 @@
             lines.forEach((line) => {
                 const formattedLine = line
                     .toLowerCase()
-                    .replace(/[^a-z0-9\s-]/g, '')
+                    .replace(/[^a-z0-9\s-]/g, '-')
                     .replace(/\s+/g, '-');
 
                 const outputLineDiv = document.createElement('div');
