@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -34,15 +33,28 @@
             padding: 5px;
             border: 1px solid #ddd;
             word-wrap: break-word;
-            white-space: pre-wrap; 
+            white-space: pre-wrap;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
         }
 
         .copy-btn {
-            margin-top: 10px;
             cursor: pointer;
             background-color: #3155a4;
-            color:white;
+            color: white;
             text-decoration: underline;
+            border: none;
+            text-decoration: none;
+        }
+
+        .copy-all-btn {
+            cursor: pointer;
+            background-color: #3155a4;
+            color: white;
+            text-decoration: underline;
+            border: none;
+            margin-top: 10px;
             text-decoration: none;
         }
     </style>
@@ -58,7 +70,8 @@
 
     <h2>Formatted Output:</h2>
     <div id="output"></div>
-    <button class="copy-btn" id="copyButton" onclick="copyToClipboard()">Copy All</button>
+
+    <button class="copy-all-btn" id="copyAllButton" onclick="copyToClipboard()">Copy All</button>
 
     <script>
         function formatText() {
@@ -66,9 +79,7 @@
             const lines = input.split('\n');
 
             const outputDiv = document.getElementById('output');
-            outputDiv.innerHTML = '';  
-
-            let formattedText = '';
+            outputDiv.innerHTML = '';
 
             lines.forEach((line) => {
                 const formattedLine = line
@@ -76,27 +87,51 @@
                     .replace(/[^a-z0-9\s-]/g, '')
                     .replace(/\s+/g, '-');
 
-                formattedText += formattedLine + '\n'; 
-            });
+                const outputLineDiv = document.createElement('div');
+                outputLineDiv.classList.add('output-line');
 
-            const formattedTextDiv = document.createElement('div');
-            formattedTextDiv.classList.add('output-line');
-            formattedTextDiv.textContent = formattedText;
-            outputDiv.appendChild(formattedTextDiv);
+                const formattedTextDiv = document.createElement('span');
+                formattedTextDiv.textContent = formattedLine;
+                outputLineDiv.appendChild(formattedTextDiv);
+
+                const copyButton = document.createElement('button');
+                copyButton.classList.add('copy-btn');
+                copyButton.textContent = 'Copy';
+                copyButton.onclick = function () {
+                    copyLineToClipboard(formattedLine);
+                };
+                outputLineDiv.appendChild(copyButton);
+
+                outputDiv.appendChild(outputLineDiv);
+            });
         }
 
         function copyToClipboard() {
             const outputDiv = document.getElementById('output');
-            const formattedText = outputDiv.textContent; 
+            const formattedLines = Array.from(outputDiv.querySelectorAll('.output-line')).map(line => {
+                return line.querySelector('span').textContent;
+            });
 
-            const tempInput = document.createElement('textarea');  
+            const formattedText = formattedLines.join('\n');
+            const tempInput = document.createElement('textarea');
             document.body.appendChild(tempInput);
-            tempInput.value = formattedText;  
+            tempInput.value = formattedText;
             tempInput.select();
             document.execCommand('copy');
             document.body.removeChild(tempInput);
 
-            alert('Copied to clipboard!');
+            alert('Copied all lines to clipboard!');
+        }
+
+        function copyLineToClipboard(lineText) {
+            const tempInput = document.createElement('textarea');
+            document.body.appendChild(tempInput);
+            tempInput.value = lineText;
+            tempInput.select();
+            document.execCommand('copy');
+            document.body.removeChild(tempInput);
+
+            alert('Copied this line to clipboard!');
         }
     </script>
 </body>
